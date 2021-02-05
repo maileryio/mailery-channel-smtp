@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "@maileryio/mailery-mailing": "1.0.*"
+        "@maileryio/mailery-channel-email": "1.0.*"
     },
     "license": "BSD-3-Clause"
 }

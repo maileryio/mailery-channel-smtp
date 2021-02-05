@@ -1,18 +1,18 @@
 {
-    "name": "maileryio/mailery-mailing",
+    "name": "maileryio/mailery-channel-email",
     "type": "library",
-    "description": "Mailing module for Mailery Platform",
+    "description": "Email channel module for Mailery Platform",
     "keywords": [
         "mail",
         "mailer",
         "mailinig"
     ],
-    "homepage": "https://github.com/maileryio/mailery-mailing",
+    "homepage": "https://github.com/maileryio/mailery-channel-email",
     "license": "BSD-3-Clause",
     "support": {
-        "source": "https://github.com/maileryio/mailery-mailing",
-        "issues": "https://github.com/maileryio/mailery-mailing/issues",
-        "wiki": "https://github.com/maileryio/mailery-mailing/wiki"
+        "source": "https://github.com/maileryio/mailery-channel-email",
+        "issues": "https://github.com/maileryio/mailery-channel-email/issues",
+        "wiki": "https://github.com/maileryio/mailery-channel-email/wiki"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Mailery\\Mailing\\": "src"
+            "Mailery\\Channel\\Email\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mailery\\Mailing\\Tests\\": "tests"
+            "Mailery\\Channel\\Email\\Tests\\": "tests"
         }
     },
     "scripts": {
