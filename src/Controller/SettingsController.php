@@ -1,9 +1,9 @@
 <?php
 
-namespace Mailery\Channel\Controller;
+namespace Mailery\Channel\Email\Controller;
 
-use Mailery\Brand\Form\BrandForm;
-use Mailery\Brand\Service\BrandCrudService;
+use Mailery\Channel\Email\Form\DomainForm;
+use Mailery\Channel\Email\Service\DomainCrudService;
 use Mailery\Brand\BrandLocatorInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,6 +13,8 @@ use Yiisoft\Yii\View\ViewRenderer;
 use Psr\Http\Message\ResponseFactoryInterface as ResponseFactory;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Session\Flash\FlashInterface;
+use Mailery\Channel\Email\Repository\DomainRepository;
+use Mailery\Channel\Email\ValueObject\DomainValueObject;
 
 class SettingsController
 {
@@ -32,9 +34,14 @@ class SettingsController
     private UrlGenerator $urlGenerator;
 
     /**
-     * @var BrandCrudService
+     * @var DomainRepository
      */
-    private BrandCrudService $BrandCrudService;
+    private DomainRepository $domainRepo;
+
+    /**
+     * @var DomainCrudService
+     */
+    private DomainCrudService $domainCrudService;
 
     /**
      * @var BrandLocatorInterface
@@ -45,14 +52,15 @@ class SettingsController
      * @param ViewRenderer $viewRenderer
      * @param ResponseFactory $responseFactory
      * @param UrlGenerator $urlGenerator
-     * @param BrandCrudService $BrandCrudService
+     * @param DomainCrudService $domainCrudService
      * @param BrandLocatorInterface $brandLocator
      */
     public function __construct(
         ViewRenderer $viewRenderer,
         ResponseFactory $responseFactory,
         UrlGenerator $urlGenerator,
-        BrandCrudService $BrandCrudService,
+        DomainRepository $domainRepo,
+        DomainCrudService $domainCrudService,
         BrandLocatorInterface $brandLocator
     ) {
         $this->viewRenderer = $viewRenderer
@@ -61,7 +69,8 @@ class SettingsController
 
         $this->responseFactory = $responseFactory;
         $this->urlGenerator = $urlGenerator;
-        $this->BrandCrudService = $BrandCrudService;
+        $this->domainRepo = $domainRepo->withBrand($brandLocator->getBrand());
+        $this->domainCrudService = $domainCrudService;
         $this->brandLocator = $brandLocator;
     }
 
@@ -69,18 +78,31 @@ class SettingsController
      * @param Request $request
      * @param ValidatorInterface $validator
      * @param FlashInterface $flash
-     * @param BrandForm $form
+     * @param DomainForm $form
      * @return Response
      */
-    public function basic(Request $request, ValidatorInterface $validator, FlashInterface $flash, BrandForm $form): Response
+    public function domain(Request $request, ValidatorInterface $validator, FlashInterface $flash, DomainForm $form): Response
     {
         $body = $request->getParsedBody();
-        $brand = $this->brandLocator->getBrand();
+        $domain = $this->domainRepo->findOne();
 
-        $form = $form->withBrand($brand);
+        if ($domain !== null) {
+            $form = $form->withDomain($domain);
+        }
 
         if (($request->getMethod() === Method::POST) && $form->load($body) && $form->validate($validator)) {
-            $this->BrandCrudService->update($brand, $form);
+            $valueObject = DomainValueObject::fromForm($form)
+                ->withBrand($this->brandLocator->getBrand());
+
+            if ($domain !== null) {
+                if (empty($valueObject->getName())) {
+                    $this->domainCrudService->delete($domain);
+                } else {
+                    $this->domainCrudService->update($domain, $valueObject);
+                }
+            } else {
+                $this->domainCrudService->create($valueObject);
+            }
 
             $flash->add(
                 'success',
@@ -91,6 +113,6 @@ class SettingsController
             );
         }
 
-        return $this->viewRenderer->render('basic', compact('brand', 'form'));
+        return $this->viewRenderer->render('domain', compact('form'));
     }
 }
