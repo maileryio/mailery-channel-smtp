@@ -29,7 +29,7 @@ class DomainCrudService
     public function create(DomainValueObject $valueObject): Domain
     {
         $domain = (new Domain())
-            ->setName($valueObject->getName())
+            ->setDomain($valueObject->getDomain())
             ->setBrand($valueObject->getBrand())
         ;
 
@@ -46,7 +46,7 @@ class DomainCrudService
     public function update(Domain $domain, DomainValueObject $valueObject): Domain
     {
         $domain = $domain
-            ->setName($valueObject->getName())
+            ->setDomain($valueObject->getDomain())
         ;
 
         (new EntityWriter($this->orm))->write([$domain]);

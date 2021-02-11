@@ -3,6 +3,11 @@
 namespace Mailery\Channel\Email\Form;
 
 use Yiisoft\Form\FormModel;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Form\HtmlOptions\HasLengthHtmlOptions;
+use Mailery\Channel\Email\Entity\Domain;
 
 class DomainForm extends FormModel
 {
@@ -10,6 +15,18 @@ class DomainForm extends FormModel
      * @var string|null
      */
     private ?string $domain = null;
+
+    /**
+     * @param Domain $domain
+     * @return self
+     */
+    public function withDomain(Domain $domain): self
+    {
+        $new = clone $this;
+        $new->domain = $domain->getDomain();
+
+        return $new;
+    }
 
     /**
      * @return array
@@ -27,7 +44,7 @@ class DomainForm extends FormModel
     public function attributeHints(): array
     {
         return [
-            'domain' => 'Add a sending domain you wish to validate. A few simple DNS configurations are required in order for your emails to be sent directly from your custom domains.',
+            'domain' => 'Add a sending domain you wish to validate (yourcompany.com for example). A few simple DNS configurations are required in order for your emails to be sent directly from your domain.',
         ];
     }
 
@@ -37,5 +54,28 @@ class DomainForm extends FormModel
     public function formName(): string
     {
         return 'DomainForm';
+    }
+
+    /**
+     * @return array
+     */
+    public function rules(): array
+    {
+        return [
+            'domain' => [
+                new HasLengthHtmlOptions((new HasLength())->max(255)),
+                new Callback(static function ($value) {
+                    $result = new Result();
+
+                    if (filter_var('http://' . $value, FILTER_VALIDATE_URL) === false
+                        || filter_var(gethostbyname($value), FILTER_VALIDATE_IP) === false
+                    ) {
+                         $result->addError('Domain invalid or not exists.');
+                    }
+
+                    return $result;
+                })
+            ],
+        ];
     }
 }

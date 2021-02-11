@@ -32,7 +32,7 @@ return [
             'items' => [
                 'domain' => [
                     'label' => static function () {
-                        return 'Domain';
+                        return 'Domain verification';
                     },
                     'url' => static function (UrlGeneratorInterface $urlGenerator) {
                         return $urlGenerator->generate('/brand/settings/domain');

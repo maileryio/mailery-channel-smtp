@@ -95,13 +95,13 @@ class SettingsController
                 ->withBrand($this->brandLocator->getBrand());
 
             if ($domain !== null) {
-                if (empty($valueObject->getName())) {
+                if (empty($valueObject->getDomain())) {
                     $this->domainCrudService->delete($domain);
                 } else {
                     $this->domainCrudService->update($domain, $valueObject);
                 }
             } else {
-                $this->domainCrudService->create($valueObject);
+                $domain = $this->domainCrudService->create($valueObject);
             }
 
             $flash->add(
@@ -113,6 +113,11 @@ class SettingsController
             );
         }
 
+        $provider = new \Mesour\DnsChecker\Providers\DnsRecordProvider();
+        $checker = new \Mesour\DnsChecker\DnsChecker($provider);
+
+        $dnsRecordSet = $checker->getDnsRecordSet('mail.automotolife.com', DNS_MX + DNS_TXT);
+var_dump($dnsRecordSet->getRecords());exit;
         return $this->viewRenderer->render('domain', compact('form'));
     }
 }

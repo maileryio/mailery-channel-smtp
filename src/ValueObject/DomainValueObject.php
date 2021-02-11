@@ -10,7 +10,7 @@ class DomainValueObject
     /**
      * @var string
      */
-    private string $name;
+    private string $domain;
 
     /**
      * @var Brand
@@ -24,7 +24,7 @@ class DomainValueObject
     public static function fromForm(DomainForm $form): self
     {
         $new = new self();
-        $new->name = $form->getAttributeValue('domain');
+        $new->domain = $form->getAttributeValue('domain');
 
         return $new;
     }
@@ -32,9 +32,9 @@ class DomainValueObject
     /**
      * @return string
      */
-    public function getName(): string
+    public function getDomain(): string
     {
-        return $this->name;
+        return $this->domain;
     }
 
     /**

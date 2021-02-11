@@ -34,14 +34,14 @@ class Domain implements RoutableEntityInterface, LoggableEntityInterface
      * @Cycle\Annotated\Annotation\Column(type = "string(255)")
      * @var string
      */
-    private $name;
+    private $domain;
 
     /**
      * @return string
      */
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getDomain();
     }
 
     /**
@@ -85,18 +85,18 @@ class Domain implements RoutableEntityInterface, LoggableEntityInterface
     /**
      * @return string
      */
-    public function getName(): string
+    public function getDomain(): string
     {
-        return $this->name;
+        return $this->domain;
     }
 
     /**
-     * @param string $name
+     * @param string $domain
      * @return self
      */
-    public function setName(string $name): self
+    public function setDomain(string $domain): self
     {
-        $this->name = $name;
+        $this->domain = $domain;
 
         return $this;
     }
