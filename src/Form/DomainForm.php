@@ -67,6 +67,10 @@ class DomainForm extends FormModel
                 new Callback(static function ($value) {
                     $result = new Result();
 
+                    if (empty($value)) {
+                        return $result;
+                    }
+
                     if (filter_var('http://' . $value, FILTER_VALIDATE_URL) === false
                         || filter_var(gethostbyname($value), FILTER_VALIDATE_IP) === false
                     ) {

@@ -97,6 +97,7 @@ class SettingsController
             if ($domain !== null) {
                 if (empty($valueObject->getDomain())) {
                     $this->domainCrudService->delete($domain);
+                    $domain = null;
                 } else {
                     $this->domainCrudService->update($domain, $valueObject);
                 }
@@ -113,11 +114,23 @@ class SettingsController
             );
         }
 
-        $provider = new \Mesour\DnsChecker\Providers\DnsRecordProvider();
-        $checker = new \Mesour\DnsChecker\DnsChecker($provider);
+        if ($domain !== null) {
+//            $expectedDnsRecordSet = new \Mesour\DnsChecker\DnsRecordSet([
+//                new \Mesour\DnsChecker\DnsRecord(\Mesour\DnsChecker\DnsRecordType::MX, $domain->getDomain(), ''),
+//            ]);
+        }
 
-        $dnsRecordSet = $checker->getDnsRecordSet('mail.automotolife.com', DNS_MX + DNS_TXT);
-var_dump($dnsRecordSet->getRecords());exit;
-        return $this->viewRenderer->render('domain', compact('form'));
+//        $dnsRequest = new \Mesour\DnsChecker\DnsRecordRequest();
+//        $dnsRequest->addFilter('automotolife.com', DNS_MX + DNS_TXT);
+//        $dnsRequest->addFilter('mail._domainkey.automotolife.com', DNS_TXT);
+//        $dnsRequest->addFilter('_dmarc.automotolife.com', DNS_TXT);
+//
+//        $provider = new \Mesour\DnsChecker\Providers\DnsRecordProvider();
+//        $checker = new \Mesour\DnsChecker\DnsChecker($provider);
+//
+//        $dnsRecordSet = $checker->getDnsRecordSetFromRequest($dnsRequest);
+//var_dump($dnsRecordSet->getRecords());exit;
+
+        return $this->viewRenderer->render('domain', compact('form', 'domain'));
     }
 }

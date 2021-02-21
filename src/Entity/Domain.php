@@ -6,6 +6,8 @@ use Mailery\Activity\Log\Entity\LoggableEntityInterface;
 use Mailery\Activity\Log\Entity\LoggableEntityTrait;
 use Mailery\Brand\Entity\Brand;
 use Mailery\Common\Entity\RoutableEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Cycle\Annotated\Annotation\Entity(
@@ -35,6 +37,17 @@ class Domain implements RoutableEntityInterface, LoggableEntityInterface
      * @var string
      */
     private $domain;
+
+    /**
+     * @Cycle\Annotated\Annotation\Relation\HasMany(target = "Mailery\Channel\Email\Entity\DnsRecord")
+     * @var Collection
+     */
+    private $dnsRecords;
+
+    public function __construct()
+    {
+        $this->dnsRecords = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -97,6 +110,25 @@ class Domain implements RoutableEntityInterface, LoggableEntityInterface
     public function setDomain(string $domain): self
     {
         $this->domain = $domain;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDnsRecords(): Collection
+    {
+        return $this->dnsRecords;
+    }
+
+    /**
+     * @param Collection|array $dnsRecords
+     * @return self
+     */
+    public function setDnsRecords($dnsRecords): self
+    {
+        $this->dnsRecords = $dnsRecords;
 
         return $this;
     }
