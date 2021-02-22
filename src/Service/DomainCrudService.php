@@ -3,12 +3,12 @@
 namespace Mailery\Channel\Email\Service;
 
 use Cycle\ORM\ORMInterface;
+use Cycle\ORM\Transaction;
 use Mailery\Channel\Email\Entity\Domain;
 use Mailery\Channel\Email\Entity\DnsRecord;
 use Mailery\Channel\Email\ValueObject\DomainValueObject;
 use Mailery\Channel\Email\Provider\DnsRecordsProvider;
 use Mesour\DnsChecker\DnsRecord as MesourDnsRecord;
-use Mesour\DnsChecker\DnsRecordType;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 class DomainCrudService
@@ -63,14 +63,18 @@ class DomainCrudService
             ->setDomain($valueObject->getDomain())
         ;
 
-        (new EntityWriter($this->orm))->delete([
-            ...($domain->getDnsRecords()->toArray()),
-        ]);
+        $transaction = new Transaction($this->orm);
+        $transaction->persist($domain);
 
-        (new EntityWriter($this->orm))->write([
-            $domain,
-            ...($this->buildDnsRecords($domain)),
-        ]);
+        foreach ($domain->getDnsRecords() as $entity) {
+            $transaction->delete($entity);
+        }
+
+        foreach ($this->buildDnsRecords($domain) as $entity) {
+            $transaction->persist($entity);
+        }
+
+        $transaction->run();
 
         return $domain;
     }
