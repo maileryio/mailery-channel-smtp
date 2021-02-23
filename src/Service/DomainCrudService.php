@@ -103,11 +103,12 @@ class DomainCrudService
         foreach ($dnsRecordsSet->getRecords() as $subtype => $item) {
             /** @var MesourDnsRecord $item */
             $dnsRecords[] = (new DnsRecord)
+                ->setDomain($domain)
                 ->setType($item->getType())
                 ->setSubtype($subtype)
                 ->setName($item->getName())
                 ->setContent($item->getContent())
-                ->setDomain($domain);
+                ->setStatus(DnsRecord::STATUS_PENDING);
         }
 
         return $dnsRecords;

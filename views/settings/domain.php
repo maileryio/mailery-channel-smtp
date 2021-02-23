@@ -73,14 +73,13 @@ use Yiisoft\Yii\Widgets\ContentDecorator;
                         <b-collapse id="check-dns-<?= $index ?>" <?= $index === 0 ? 'visible' : '' ?> accordion="check-dns" role="tabpanel">
                             <b-card-body>
                                 <b-card-text>
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input class="form-control" type="text" value="<?= $dnsRecord->getName() ?>" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Content</label>
-                                        <input class="form-control" type="text" value="<?= $dnsRecord->getContent() ?>" readonly>
-                                    </div>
+                                    <div class="p-1">Name</div>
+                                    <div class="bg-light border p-2"><?= $dnsRecord->getName() ?></div>
+
+                                    <div class="p-2"></div>
+
+                                    <div class="p-1">Content</div>
+                                    <div class="bg-light border p-2"><?= $dnsRecord->getContent() ?></div>
                                 </b-card-text>
                             </b-card-body>
                         </b-collapse>

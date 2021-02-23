@@ -18,6 +18,9 @@ class DnsRecord implements RoutableEntityInterface, LoggableEntityInterface
 {
     use LoggableEntityTrait;
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_COMPLETED = 'completed';
+
     /**
      * @Cycle\Annotated\Annotation\Column(type = "primary")
      * @var int|null
@@ -55,11 +58,16 @@ class DnsRecord implements RoutableEntityInterface, LoggableEntityInterface
     private $content;
 
     /**
+     * @Cycle\Annotated\Annotation\Column(type = "enum(pending, completed)")
+     */
+    private $status;
+
+    /**
      * @return string
      */
     public function __toString(): string
     {
-        return 'DNS Record';
+        return 'DNS Record #' . $this->getId();
     }
 
     /**
@@ -173,6 +181,25 @@ class DnsRecord implements RoutableEntityInterface, LoggableEntityInterface
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return self
+     */
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
