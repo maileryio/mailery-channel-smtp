@@ -9,7 +9,7 @@ class EmailChannel implements ChannelInterface
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getName(): string
     {
         return 'email';
     }
