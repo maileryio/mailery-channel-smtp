@@ -1,12 +1,16 @@
 <?php
 
-use Mailery\Channel\Email\Model\EmailChannelType;
 use Yiisoft\Factory\Definitions\Reference;
+use Mailery\Channel\Email\Model\EmailChannelType;
+use Mailery\Channel\Email\Handler\EmailChannelHandler;
 
 return [
     'maileryio/mailery-channel' => [
         'types' => [
             Reference::to(EmailChannelType::class),
+        ],
+        'handlers' => [
+            Reference::to(EmailChannelHandler::class),
         ],
     ],
 
