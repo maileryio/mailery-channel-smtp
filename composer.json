@@ -49,7 +49,7 @@
             "params": "params.php",
             "common": "common.php",
             "web": "web.php",
-            "providers-web": "providers-web.php"
+            "routes": "routes.php"
         },
         "config-plugin-options": {
             "source-directory": "config"
