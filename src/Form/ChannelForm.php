@@ -45,8 +45,8 @@ class ChannelForm extends FormModel
     {
         return [
             'name' => [
-                new RequiredHtmlOptions(new Required()),
-                new HasLengthHtmlOptions((new HasLength())->max(255)),
+                new RequiredHtmlOptions(Required::rule()),
+                new HasLengthHtmlOptions(HasLength::rule()->max(255)),
             ],
         ];
     }
