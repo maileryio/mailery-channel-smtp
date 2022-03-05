@@ -94,7 +94,7 @@ class DefaultController
     {
         $body = $request->getParsedBody();
 
-        if (($request->getMethod() === Method::POST) && $form->load($body) && $validator->validate($form)) {
+        if (($request->getMethod() === Method::POST) && $form->load($body) && $validator->validate($form)->isValid()) {
             $valueObject = ChannelValueObject::fromForm($form);
             $channel = $this->channelCrudService->create($valueObject);
 
@@ -123,7 +123,7 @@ class DefaultController
 
         $form = $form->withEntity($channel);
 
-        if (($request->getMethod() === Method::POST) && $form->load($body) && $validator->validate($form)) {
+        if (($request->getMethod() === Method::POST) && $form->load($body) && $validator->validate($form)->isValid()) {
             $valueObject = ChannelValueObject::fromForm($form);
             $this->channelCrudService->update($channel, $valueObject);
 

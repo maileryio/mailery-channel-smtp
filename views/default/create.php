@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /** @var Yiisoft\Form\Widget\Field $field */
 /** @var Yiisoft\Router\UrlGeneratorInterface $urlGenerator */
@@ -22,5 +22,4 @@ $this->setTitle('New channel');
     </div>
 </div>
 <div class="mb-2"></div>
-
 <?= $this->render('_form', compact('csrf', 'field', 'form')) ?>
