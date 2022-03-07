@@ -29,6 +29,14 @@ class ChannelForm extends FormModel
     }
 
     /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
      * @return array
      */
     public function getAttributeLabels(): array
@@ -46,7 +54,7 @@ class ChannelForm extends FormModel
         return [
             'name' => [
                 new RequiredHtmlOptions(Required::rule()),
-                new HasLengthHtmlOptions(HasLength::rule()->max(255)),
+                new HasLengthHtmlOptions(HasLength::rule()->min(3)->max(255)),
             ],
         ];
     }

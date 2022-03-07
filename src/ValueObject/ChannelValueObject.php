@@ -18,8 +18,7 @@ class ChannelValueObject
     public static function fromForm(ChannelForm $form): self
     {
         $new = new self();
-
-        $new->name = $form->getAttributeValue('name');
+        $new->name = $form->getName();
 
         return $new;
     }
