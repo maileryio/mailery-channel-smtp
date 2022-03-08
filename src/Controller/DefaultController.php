@@ -78,7 +78,7 @@ class DefaultController
     {
         $channelId = $request->getAttribute('id');
         if (empty($channelId) || ($channel = $this->channelRepo->findByPK($channelId)) === null) {
-            return $this->responseFactory->createResponse(404);
+            return $this->responseFactory->createResponse(Status::NOT_FOUND);
         }
 
         return $this->viewRenderer->render('view', compact('channel'));
@@ -118,7 +118,7 @@ class DefaultController
         $body = $request->getParsedBody();
         $channelId = $request->getAttribute('id');
         if (empty($channelId) || ($channel = $this->channelRepo->findByPK($channelId)) === null) {
-            return $this->responseFactory->createResponse(404);
+            return $this->responseFactory->createResponse(Status::NOT_FOUND);
         }
 
         $form = $form->withEntity($channel);
@@ -149,13 +149,13 @@ class DefaultController
     {
         $channelId = $request->getAttribute('id');
         if (empty($channelId) || ($channel = $this->channelRepo->findByPK($channelId)) === null) {
-            return $this->responseFactory->createResponse(404);
+            return $this->responseFactory->createResponse(Status::NOT_FOUND);
         }
 
         $channelCrudService->delete($channel);
 
         return $this->responseFactory
-            ->createResponse(302)
-            ->withHeader('Location', $urlGenerator->generate('/channel/default/index'));
+            ->createResponse(Status::SEE_OTHER)
+            ->withHeader(Header::LOCATION, $urlGenerator->generate('/channel/default/index'));
     }
 }
