@@ -4,9 +4,7 @@ namespace Mailery\Channel\Email\Form;
 
 use Yiisoft\Form\FormModel;
 use Mailery\Channel\Email\Entity\EmailChannel;
-use Yiisoft\Form\HtmlOptions\RequiredHtmlOptions;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Form\HtmlOptions\HasLengthHtmlOptions;
 use Yiisoft\Validator\Rule\HasLength;
 
 class ChannelForm extends FormModel
@@ -53,8 +51,8 @@ class ChannelForm extends FormModel
     {
         return [
             'name' => [
-                new RequiredHtmlOptions(Required::rule()),
-                new HasLengthHtmlOptions(HasLength::rule()->min(3)->max(255)),
+                Required::rule(),
+                HasLength::rule()->min(3)->max(255),
             ],
         ];
     }

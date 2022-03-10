@@ -1,6 +1,6 @@
 <?php
 
-use Yiisoft\Factory\Definition\Reference;
+use Yiisoft\Definitions\Reference;
 use Mailery\Channel\Email\Model\EmailChannelType;
 use Mailery\Channel\Email\Handler\EmailChannelHandler;
 
@@ -15,7 +15,7 @@ return [
     ],
 
     'yiisoft/yii-cycle' => [
-        'annotated-entity-paths' => [
+        'entity-paths' => [
             '@vendor/maileryio/mailery-channel-email/src/Entity',
         ],
     ],
