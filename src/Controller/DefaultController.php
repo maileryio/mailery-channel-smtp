@@ -16,6 +16,7 @@ use Yiisoft\Http\Status;
 use Yiisoft\Http\Header;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Session\Flash\FlashInterface;
+use Yiisoft\Router\CurrentRoute;
 
 class DefaultController
 {
@@ -71,12 +72,12 @@ class DefaultController
     }
 
     /**
-     * @param Request $request
+     * @param CurrentRoute $currentRoute
      * @return Response
      */
-    public function view(Request $request): Response
+    public function view(CurrentRoute $currentRoute): Response
     {
-        $channelId = $request->getAttribute('id');
+        $channelId = $currentRoute->getArgument('id');
         if (empty($channelId) || ($channel = $this->channelRepo->findByPK($channelId)) === null) {
             return $this->responseFactory->createResponse(Status::NOT_FOUND);
         }
@@ -108,15 +109,16 @@ class DefaultController
 
     /**
      * @param Request $request
+     * @param CurrentRoute $currentRoute
      * @param ValidatorInterface $validator
      * @param FlashInterface $flash
      * @param ChannelForm $form
      * @return Response
      */
-    public function edit(Request $request, ValidatorInterface $validator, FlashInterface $flash, ChannelForm $form): Response
+    public function edit(Request $request, CurrentRoute $currentRoute, ValidatorInterface $validator, FlashInterface $flash, ChannelForm $form): Response
     {
         $body = $request->getParsedBody();
-        $channelId = $request->getAttribute('id');
+        $channelId = $currentRoute->getArgument('id');
         if (empty($channelId) || ($channel = $this->channelRepo->findByPK($channelId)) === null) {
             return $this->responseFactory->createResponse(Status::NOT_FOUND);
         }
@@ -140,14 +142,14 @@ class DefaultController
     }
 
     /**
-     * @param Request $request
+     * @param CurrentRoute $currentRoute
      * @param ChannelCrudService $channelCrudService
      * @param UrlGenerator $urlGenerator
      * @return Response
      */
-    public function delete(Request $request, ChannelCrudService $channelCrudService, UrlGenerator $urlGenerator): Response
+    public function delete(CurrentRoute $currentRoute, ChannelCrudService $channelCrudService, UrlGenerator $urlGenerator): Response
     {
-        $channelId = $request->getAttribute('id');
+        $channelId = $currentRoute->getArgument('id');
         if (empty($channelId) || ($channel = $this->channelRepo->findByPK($channelId)) === null) {
             return $this->responseFactory->createResponse(Status::NOT_FOUND);
         }

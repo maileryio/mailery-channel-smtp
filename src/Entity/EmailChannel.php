@@ -3,7 +3,6 @@
 namespace Mailery\Channel\Email\Entity;
 
 use Cycle\Annotated\Annotation\Entity;
-use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Inheritance\SingleTable;
 use Mailery\Channel\Entity\Channel;
 use Mailery\Activity\Log\Entity\LoggableEntityInterface;
@@ -16,8 +15,10 @@ class EmailChannel extends Channel implements RoutableEntityInterface, LoggableE
 {
     use LoggableEntityTrait;
 
-    #[Column(type: 'string')]
-    protected string $email;
+    public function __construct()
+    {
+        $this->type = self::class;
+    }
 
     /**
      * @inheritdoc
