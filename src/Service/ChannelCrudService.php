@@ -52,4 +52,15 @@ class ChannelCrudService
 
         return $channel;
     }
+
+    /**
+     * @param EmailChannel $channel
+     * @return bool
+     */
+    public function delete(EmailChannel $channel): bool
+    {
+        (new EntityWriter($this->orm))->delete([$channel]);
+
+        return true;
+    }
 }

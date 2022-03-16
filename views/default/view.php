@@ -10,7 +10,7 @@ use Mailery\Web\Widget\FlashMessage;
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Psr\Http\Message\ServerRequestInterface $request */
 /** @var Mailery\Channel\Email\Entity\EmailChannel $channel */
-/** @var string $csrf */
+/** @var Yiisoft\Yii\View\Csrf $csrf */
 /** @var bool $submitted */
 
 $this->setTitle($channel->getName());

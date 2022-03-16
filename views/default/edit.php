@@ -8,7 +8,7 @@ use Mailery\Web\Widget\FlashMessage;
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Psr\Http\Message\ServerRequestInterface $request */
 /** @var Mailery\Channel\Email\Form\ChannelForm $form */
-/** @var string $csrf */
+/** @var Yiisoft\Yii\View\Csrf $csrf */
 
 $this->setTitle('Edit channel #' . $channel->getId());
 

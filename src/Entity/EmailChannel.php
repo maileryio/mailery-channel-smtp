@@ -15,6 +15,11 @@ class EmailChannel extends Channel implements RoutableEntityInterface, LoggableE
 {
     use LoggableEntityTrait;
 
+    public function __construct()
+    {
+        $this->type = self::class;
+    }
+
     /**
      * @inheritdoc
      */
