@@ -15,8 +15,7 @@ use Yiisoft\Form\Widget\Form;
                 ->id('channel-form')
                 ->begin(); ?>
 
-        <?= $field->text($form, 'name')
-                ->autofocus(); ?>
+        <?= $field->text($form, 'name')->autofocus(); ?>
 
         <?= $field->submitButton()
                 ->class('btn btn-primary float-right mt-2')
