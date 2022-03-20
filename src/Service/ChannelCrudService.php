@@ -10,17 +10,11 @@ use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 class ChannelCrudService
 {
     /**
-     * @var ORMInterface
-     */
-    private ORMInterface $orm;
-
-    /**
      * @param ORMInterface $orm
      */
-    public function __construct(ORMInterface $orm)
-    {
-        $this->orm = $orm;
-    }
+    public function __construct(
+        private ORMInterface $orm
+    ) {}
 
     /**
      * @param ChannelValueObject $valueObject

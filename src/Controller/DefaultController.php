@@ -20,33 +20,6 @@ use Yiisoft\Router\CurrentRoute;
 
 class DefaultController
 {
-    private const PAGINATION_INDEX = 10;
-
-    /**
-     * @var ViewRenderer
-     */
-    private ViewRenderer $viewRenderer;
-
-    /**
-     * @var ResponseFactory
-     */
-    private ResponseFactory $responseFactory;
-
-    /**
-     * @var UrlGenerator
-     */
-    private UrlGenerator $urlGenerator;
-
-    /**
-     * @var ChannelRepository
-     */
-    private ChannelRepository $channelRepo;
-
-    /**
-     * @var ChannelCrudService
-     */
-    private ChannelCrudService $channelCrudService;
-
     /**
      * @param ViewRenderer $viewRenderer
      * @param ResponseFactory $responseFactory
@@ -55,20 +28,15 @@ class DefaultController
      * @param ChannelCrudService $channelCrudService
      */
     public function __construct(
-        ViewRenderer $viewRenderer,
-        ResponseFactory $responseFactory,
-        UrlGenerator $urlGenerator,
-        ChannelRepository $channelRepo,
-        ChannelCrudService $channelCrudService
+        private ViewRenderer $viewRenderer,
+        private ResponseFactory $responseFactory,
+        private UrlGenerator $urlGenerator,
+        private ChannelRepository $channelRepo,
+        private ChannelCrudService $channelCrudService
     ) {
         $this->viewRenderer = $viewRenderer
             ->withController($this)
             ->withViewPath(dirname(dirname(__DIR__)) . '/views');
-
-        $this->responseFactory = $responseFactory;
-        $this->urlGenerator = $urlGenerator;
-        $this->channelRepo = $channelRepo;
-        $this->channelCrudService = $channelCrudService;
     }
 
     /**
