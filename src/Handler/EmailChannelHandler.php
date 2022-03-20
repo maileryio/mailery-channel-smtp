@@ -27,6 +27,9 @@ class EmailChannelHandler implements HandlerInterface
      */
     public function handle(Sendout $sendout, Recipient $recipient): bool
     {
+        $recipient->setSendout($sendout);
+        (new EntityWriter($this->orm))->write([$recipient]);
+
         /** @var EmailSender $sender */
         $sender = $sendout->getCampaign()->getSender();
         /** @var EmailTemplate $template */
@@ -40,9 +43,6 @@ class EmailChannelHandler implements HandlerInterface
             ->withTextBody($template->getTextContent())
             ->withHtmlBody($template->getHtmlContent())
         ;
-
-        $recipient->setSendout($sendout);
-        (new EntityWriter($this->orm))->write([$recipient]);
 
         $this->mailer->send($message);
 
