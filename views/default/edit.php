@@ -4,7 +4,7 @@ use Mailery\Icon\Icon;
 use Mailery\Web\Widget\FlashMessage;
 
 /** @var Yiisoft\Form\Widget\Field $field */
-/** @var Yiisoft\Router\UrlGeneratorInterface $urlGenerator */
+/** @var Yiisoft\Router\UrlGeneratorInterface $url */
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Psr\Http\Message\ServerRequestInterface $request */
 /** @var Mailery\Channel\Email\Form\ChannelForm $form */
@@ -17,11 +17,11 @@ $this->setTitle('Edit channel #' . $channel->getId());
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
             <h1 class="h3">Edit channel #<?= $channel->getId(); ?></h1>
             <div class="btn-toolbar float-right">
-                <a class="btn btn-sm btn-info mx-sm-1 mb-2" href="<?= $urlGenerator->generate($channel->getViewRouteName(), $channel->getViewRouteParams()); ?>">
+                <a class="btn btn-sm btn-info mx-sm-1 mb-2" href="<?= $url->generate($channel->getViewRouteName(), $channel->getViewRouteParams()); ?>">
                     <?= Icon::widget()->name('eye')->options(['class' => 'mr-1']); ?>
                     View
                 </a>
-                <a class="btn btn-sm btn-outline-secondary mx-sm-1 mb-2" href="<?= $urlGenerator->generate('/channel/default/index'); ?>">
+                <a class="btn btn-sm btn-outline-secondary mx-sm-1 mb-2" href="<?= $url->generate('/channel/default/index'); ?>">
                     Back
                 </a>
             </div>

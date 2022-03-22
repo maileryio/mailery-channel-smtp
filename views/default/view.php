@@ -24,14 +24,14 @@ $this->setTitle($channel->getName());
                     ->csrf($csrf)
                     ->label(Icon::widget()->name('delete')->options(['class' => 'mr-1'])->render() . ' Delete')
                     ->method('delete')
-                    ->href($urlGenerator->generate($channel->getDeleteRouteName(), $channel->getDeleteRouteParams()))
+                    ->href($url->generate($channel->getDeleteRouteName(), $channel->getDeleteRouteParams()))
                     ->confirm('Are you sure?')
                     ->options([
                         'class' => 'btn btn-sm btn-danger mx-sm-1 mb-2',
                     ])
                     ->encode(false);
                 ?>
-                <a class="btn btn-sm btn-secondary mx-sm-1 mb-2" href="<?= $urlGenerator->generate('/channel/email/edit', ['id' => $channel->getId()]); ?>">
+                <a class="btn btn-sm btn-secondary mx-sm-1 mb-2" href="<?= $url->generate('/channel/email/edit', ['id' => $channel->getId()]); ?>">
                     <?= Icon::widget()->name('pencil')->options(['class' => 'mr-1']); ?>
                     Update
                 </a>
@@ -45,7 +45,7 @@ $this->setTitle($channel->getName());
                         ->entity($channel); ?>
                 </b-dropdown>
                 <div class="btn-toolbar float-right">
-                    <a class="btn btn-sm btn-outline-secondary mx-sm-1 mb-2" href="<?= $urlGenerator->generate('/channel/default/index'); ?>">
+                    <a class="btn btn-sm btn-outline-secondary mx-sm-1 mb-2" href="<?= $url->generate('/channel/default/index'); ?>">
                         Back
                     </a>
                 </div>
