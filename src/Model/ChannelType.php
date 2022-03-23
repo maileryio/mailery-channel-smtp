@@ -8,7 +8,7 @@ use Mailery\Campaign\Recipient\Model\RecipientIterator;
 use Mailery\Channel\Handler\HandlerInterface;
 use Mailery\Channel\Entity\Channel;
 
-class EmailChannelType implements ChannelTypeInterface
+class ChannelType implements ChannelTypeInterface
 {
     /**
      * @param HandlerInterface $handler
@@ -54,14 +54,6 @@ class EmailChannelType implements ChannelTypeInterface
     /**
      * @inheritdoc
      */
-    public function isEntitySameType(Channel $entity): bool
-    {
-        return $entity instanceof EmailChannel;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getHandler(): HandlerInterface
     {
         return $this->handler;
@@ -73,5 +65,13 @@ class EmailChannelType implements ChannelTypeInterface
     public function getRecipientIterator(): RecipientIterator
     {
         return $this->recipientIterator;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isEntitySameType(Channel $entity): bool
+    {
+        return $entity instanceof EmailChannel;
     }
 }

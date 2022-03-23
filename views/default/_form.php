@@ -12,7 +12,7 @@ use Yiisoft\Form\Widget\Form;
     <div class="col-12 col-xl-4">
         <?= Form::widget()
                 ->csrf($csrf)
-                ->id('channel-form')
+                ->id('channel-email-form')
                 ->begin(); ?>
 
         <?= $field->text($form, 'name')->autofocus(); ?>

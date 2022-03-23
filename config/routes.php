@@ -9,7 +9,7 @@ use Mailery\Channel\Email\Controller\DefaultController;
 return [
     Group::create('/channel')
         ->routes(
-                Route::get('/email/view/{id:\d+}')
+            Route::get('/email/view/{id:\d+}')
                 ->name('/channel/email/view')
                 ->action([DefaultController::class, 'view']),
             Route::methods(['GET', 'POST'], '/email/create')

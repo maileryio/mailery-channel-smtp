@@ -31,7 +31,7 @@ $this->setTitle($channel->getName());
                     ])
                     ->encode(false);
                 ?>
-                <a class="btn btn-sm btn-secondary mx-sm-1 mb-2" href="<?= $url->generate('/channel/email/edit', ['id' => $channel->getId()]); ?>">
+                <a class="btn btn-sm btn-secondary mx-sm-1 mb-2" href="<?= $url->generate($channel->getEditRouteName(), $channel->getEditRouteParams()); ?>">
                     <?= Icon::widget()->name('pencil')->options(['class' => 'mr-1']); ?>
                     Update
                 </a>

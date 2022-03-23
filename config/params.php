@@ -1,7 +1,7 @@
 <?php
 
 use Yiisoft\Definitions\Reference;
-use Mailery\Channel\Email\Model\EmailChannelType;
+use Mailery\Channel\Email\Model\ChannelType;
 use Mailery\Channel\Email\Entity\EmailChannel;
 
 return [
@@ -17,7 +17,7 @@ return [
 
     'maileryio/mailery-channel' => [
         'types' => [
-            Reference::to(EmailChannelType::class),
+            Reference::to(ChannelType::class),
         ],
     ],
 

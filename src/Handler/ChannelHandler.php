@@ -11,7 +11,7 @@ use Yiisoft\Mailer\MailerInterface;
 use Mailery\Sender\Email\Entity\EmailSender;
 use Mailery\Template\Email\Entity\EmailTemplate;
 
-class EmailChannelHandler implements HandlerInterface
+class ChannelHandler implements HandlerInterface
 {
 
     /**
