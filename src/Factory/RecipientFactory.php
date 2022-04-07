@@ -1,6 +1,6 @@
 <?php
 
-namespace Mailery\Channel\Email\Factory;
+namespace Mailery\Channel\Smtp\Factory;
 
 use Mailery\Campaign\Entity\Recipient;
 use Mailery\Channel\Factory\RecipientFactoryInterface;

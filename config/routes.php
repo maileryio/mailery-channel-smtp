@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 use Yiisoft\Router\Group;
 use Yiisoft\Router\Route;
-use Mailery\Channel\Email\Controller\DefaultController;
+use Mailery\Channel\Smtp\Controller\DefaultController;
 
 return [
     Group::create('/channel')
         ->routes(
-            Route::get('/email/view/{id:\d+}')
-                ->name('/channel/email/view')
+            Route::get('/smtp/view/{id:\d+}')
+                ->name('/channel/smtp/view')
                 ->action([DefaultController::class, 'view']),
-            Route::methods(['GET', 'POST'], '/email/create')
+            Route::methods(['GET', 'POST'], '/smtp/create')
                 ->action([DefaultController::class, 'create'])
-                ->name('/channel/email/create'),
-            Route::methods(['GET', 'POST'], '/email/edit/{id:\d+}')
+                ->name('/channel/smtp/create'),
+            Route::methods(['GET', 'POST'], '/smtp/edit/{id:\d+}')
                 ->action([DefaultController::class, 'edit'])
-                ->name('/channel/email/edit'),
-            Route::delete('/default/email/{id:\d+}')
+                ->name('/channel/smtp/edit'),
+            Route::delete('/default/smtp/{id:\d+}')
                 ->action([DefaultController::class, 'delete'])
-                ->name('/channel/email/delete'),
+                ->name('/channel/smtp/delete'),
         )
 ];

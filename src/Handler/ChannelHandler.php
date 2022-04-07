@@ -1,6 +1,6 @@
 <?php
 
-namespace Mailery\Channel\Email\Handler;
+namespace Mailery\Channel\Smtp\Handler;
 
 use Mailery\Campaign\Entity\Sendout;
 use Mailery\Campaign\Entity\Recipient;

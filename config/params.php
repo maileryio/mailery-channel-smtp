@@ -1,15 +1,15 @@
 <?php
 
 use Yiisoft\Definitions\Reference;
-use Mailery\Channel\Email\Model\ChannelType;
-use Mailery\Channel\Email\Entity\EmailChannel;
+use Mailery\Channel\Smtp\Model\ChannelType;
+use Mailery\Channel\Smtp\Entity\SmtpChannel;
 
 return [
     'maileryio/mailery-activity-log' => [
         'entity-groups' => [
             'channel' => [
                 'entities' => [
-                    EmailChannel::class,
+                    SmtpChannel::class,
                 ],
             ],
         ],
@@ -23,7 +23,7 @@ return [
 
     'yiisoft/yii-cycle' => [
         'entity-paths' => [
-            '@vendor/maileryio/mailery-channel-email/src/Entity',
+            '@vendor/maileryio/mailery-channel-smtp/src/Entity',
         ],
     ],
 ];

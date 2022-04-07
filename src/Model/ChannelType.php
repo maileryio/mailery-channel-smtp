@@ -1,9 +1,9 @@
 <?php
 
-namespace Mailery\Channel\Email\Model;
+namespace Mailery\Channel\Smtp\Model;
 
 use Mailery\Channel\Model\ChannelTypeInterface;
-use Mailery\Channel\Email\Entity\EmailChannel;
+use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Mailery\Campaign\Recipient\Model\RecipientIterator;
 use Mailery\Channel\Handler\HandlerInterface;
 use Mailery\Channel\Entity\Channel;
@@ -24,7 +24,7 @@ class ChannelType implements ChannelTypeInterface
      */
     public function getLabel(): string
     {
-        return 'Email messaging';
+        return 'SMTP';
     }
 
     /**
@@ -32,7 +32,7 @@ class ChannelType implements ChannelTypeInterface
      */
     public function getCreateLabel(): string
     {
-        return 'Email messaging';
+        return 'SMTP';
     }
 
     /**
@@ -40,7 +40,7 @@ class ChannelType implements ChannelTypeInterface
      */
     public function getCreateRouteName(): ?string
     {
-        return '/channel/email/create';
+        return '/channel/smtp/create';
     }
 
     /**
@@ -72,6 +72,6 @@ class ChannelType implements ChannelTypeInterface
      */
     public function isEntitySameType(Channel $entity): bool
     {
-        return $entity instanceof EmailChannel;
+        return $entity instanceof SmtpChannel;
     }
 }

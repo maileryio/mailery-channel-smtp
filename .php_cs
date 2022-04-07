@@ -2,9 +2,9 @@
 
 $date = date('Y');
 $header = <<<EOF
-Email channel module for Mailery Platform
-@link      https://github.com/maileryio/mailery-channel-email
-@package   Mailery\Channel\Email
+SMTP channel module for Mailery Platform
+@link      https://github.com/maileryio/mailery-channel-smtp
+@package   Mailery\Channel\Smtp
 @license   BSD-3-Clause
 @copyright Copyright (c) {$date}, Mailery (https://mailery.io/)
 EOF;

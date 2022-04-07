@@ -1,9 +1,9 @@
 <?php
 
-namespace Mailery\Channel\Email\Form;
+namespace Mailery\Channel\Smtp\Form;
 
 use Yiisoft\Form\FormModel;
-use Mailery\Channel\Email\Entity\EmailChannel;
+use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\HasLength;
 
@@ -15,10 +15,10 @@ class ChannelForm extends FormModel
     private ?string $name = null;
 
     /**
-     * @param EmailChannel $channel
+     * @param SmtpChannel $channel
      * @return self
      */
-    public function withEntity(EmailChannel $channel): self
+    public function withEntity(SmtpChannel $channel): self
     {
         $new = clone $this;
         $new->name = $channel->getName();

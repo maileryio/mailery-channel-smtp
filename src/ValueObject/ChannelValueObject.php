@@ -1,8 +1,8 @@
 <?php
 
-namespace Mailery\Channel\Email\ValueObject;
+namespace Mailery\Channel\Smtp\ValueObject;
 
-use Mailery\Channel\Email\Form\ChannelForm;
+use Mailery\Channel\Smtp\Form\ChannelForm;
 
 class ChannelValueObject
 {

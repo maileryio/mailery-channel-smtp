@@ -2,14 +2,14 @@
 
 use Mailery\Activity\Log\Widget\ActivityLogLink;
 use Mailery\Icon\Icon;
-use Mailery\Channel\Email\Entity\EmailChannel;
+use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Mailery\Widget\Dataview\DetailView;
 use Mailery\Widget\Link\Link;
 use Mailery\Web\Widget\FlashMessage;
 
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Psr\Http\Message\ServerRequestInterface $request */
-/** @var Mailery\Channel\Email\Entity\EmailChannel $channel */
+/** @var Mailery\Channel\Smtp\Entity\SmtpChannel $channel */
 /** @var Yiisoft\Yii\View\Csrf $csrf */
 /** @var bool $submitted */
 
@@ -74,7 +74,7 @@ $this->setTitle($channel->getName());
             ->attributes([
                 [
                     'label' => 'Name',
-                    'value' => function (EmailChannel $data, $index) {
+                    'value' => function (SmtpChannel $data, $index) {
                         return $data->getName();
                     },
                 ],

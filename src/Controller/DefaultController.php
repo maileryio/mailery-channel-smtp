@@ -1,11 +1,11 @@
 <?php
 
-namespace Mailery\Channel\Email\Controller;
+namespace Mailery\Channel\Smtp\Controller;
 
 use Mailery\Channel\Repository\ChannelRepository;
-use Mailery\Channel\Email\Service\ChannelCrudService;
-use Mailery\Channel\Email\Form\ChannelForm;
-use Mailery\Channel\Email\ValueObject\ChannelValueObject;
+use Mailery\Channel\Smtp\Service\ChannelCrudService;
+use Mailery\Channel\Smtp\Form\ChannelForm;
+use Mailery\Channel\Smtp\ValueObject\ChannelValueObject;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Yiisoft\Yii\View\ViewRenderer;

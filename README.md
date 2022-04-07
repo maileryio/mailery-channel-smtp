@@ -1,14 +1,14 @@
-# Email channel module for Mailery Platform
+# SMTP channel module for Mailery Platform
 
-**Email channel module for Mailery Platform**
+**SMTP channel module for Mailery Platform**
 
-[![Latest Stable Version](https://poser.pugx.org/maileryio/mailery-channel-email/v/stable)](https://packagist.org/packages/maileryio/mailery-channel-email)
-[![Total Downloads](https://poser.pugx.org/maileryio/mailery-channel-email/downloads)](https://packagist.org/packages/maileryio/mailery-channel-email)
-[![Build Status](https://travis-ci.com/maileryio/mailery-channel-email.svg?branch=master)](https://travis-ci.com/maileryio/mailery-channel-email)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/maileryio/mailery-channel-email.svg)](https://scrutinizer-ci.com/g/maileryio/mailery-channel-email/)
-[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/maileryio/mailery-channel-email.svg)](https://scrutinizer-ci.com/g/maileryio/mailery-channel-email/)
+[![Latest Stable Version](https://poser.pugx.org/maileryio/mailery-channel-smtp/v/stable)](https://packagist.org/packages/maileryio/mailery-channel-smtp)
+[![Total Downloads](https://poser.pugx.org/maileryio/mailery-channel-smtp/downloads)](https://packagist.org/packages/maileryio/mailery-channel-smtp)
+[![Build Status](https://travis-ci.com/maileryio/mailery-channel-smtp.svg?branch=master)](https://travis-ci.com/maileryio/mailery-channel-smtp)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/maileryio/mailery-channel-smtp.svg)](https://scrutinizer-ci.com/g/maileryio/mailery-channel-smtp/)
+[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/maileryio/mailery-channel-smtp.svg)](https://scrutinizer-ci.com/g/maileryio/mailery-channel-smtp/)
 
-Email channel module for Mailery Platform
+SMTP channel module for Mailery Platform
 
 ## Installation
 
@@ -17,13 +17,13 @@ The preferred way to install this library is through [composer](http://getcompos
 Either run
 
 ```sh
-php composer.phar require "maileryio/mailery-channel-email"
+php composer.phar require "maileryio/mailery-channel-smtp"
 ```
 
 or add
 
 ```json
-"maileryio/mailery-channel-email": "*"
+"maileryio/mailery-channel-smtp": "*"
 ```
 
 to the require section of your composer.json.

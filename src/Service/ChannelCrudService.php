@@ -1,10 +1,10 @@
 <?php
 
-namespace Mailery\Channel\Email\Service;
+namespace Mailery\Channel\Smtp\Service;
 
 use Cycle\ORM\ORMInterface;
-use Mailery\Channel\Email\Entity\EmailChannel;
-use Mailery\Channel\Email\ValueObject\ChannelValueObject;
+use Mailery\Channel\Smtp\Entity\SmtpChannel;
+use Mailery\Channel\Smtp\ValueObject\ChannelValueObject;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 class ChannelCrudService
@@ -18,11 +18,11 @@ class ChannelCrudService
 
     /**
      * @param ChannelValueObject $valueObject
-     * @return EmailChannel
+     * @return SmtpChannel
      */
-    public function create(ChannelValueObject $valueObject): EmailChannel
+    public function create(ChannelValueObject $valueObject): SmtpChannel
     {
-        $channel = (new EmailChannel())
+        $channel = (new SmtpChannel())
             ->setName($valueObject->getName())
         ;
 
@@ -32,11 +32,11 @@ class ChannelCrudService
     }
 
     /**
-     * @param EmailChannel $channel
+     * @param SmtpChannel $channel
      * @param ChannelValueObject $valueObject
-     * @return EmailChannel
+     * @return SmtpChannel
      */
-    public function update(EmailChannel $channel, ChannelValueObject $valueObject): EmailChannel
+    public function update(SmtpChannel $channel, ChannelValueObject $valueObject): SmtpChannel
     {
         $channel = $channel
             ->setName($valueObject->getName())
@@ -48,10 +48,10 @@ class ChannelCrudService
     }
 
     /**
-     * @param EmailChannel $channel
+     * @param SmtpChannel $channel
      * @return bool
      */
-    public function delete(EmailChannel $channel): bool
+    public function delete(SmtpChannel $channel): bool
     {
         (new EntityWriter($this->orm))->delete([$channel]);
 
