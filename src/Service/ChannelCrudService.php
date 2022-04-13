@@ -24,6 +24,7 @@ class ChannelCrudService
     {
         $channel = (new SmtpChannel())
             ->setName($valueObject->getName())
+            ->setDescription($valueObject->getDescription())
         ;
 
         (new EntityWriter($this->orm))->write([$channel]);
@@ -40,6 +41,7 @@ class ChannelCrudService
     {
         $channel = $channel
             ->setName($valueObject->getName())
+            ->setDescription($valueObject->getDescription())
         ;
 
         (new EntityWriter($this->orm))->write([$channel]);

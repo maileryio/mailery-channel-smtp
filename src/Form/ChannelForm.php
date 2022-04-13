@@ -3,27 +3,48 @@
 namespace Mailery\Channel\Smtp\Form;
 
 use Yiisoft\Form\FormModel;
-use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\HasLength;
+use Mailery\Channel\Entity\Channel;
 
 class ChannelForm extends FormModel
 {
+
     /**
      * @var string|null
      */
     private ?string $name = null;
 
     /**
-     * @param SmtpChannel $channel
+     * @var string|null
+     */
+    private ?string $description = null;
+
+    /**
+     * @var Channel|null
+     */
+    private ?Channel $entity = null;
+
+    /**
+     * @param Channel $entity
      * @return self
      */
-    public function withEntity(SmtpChannel $channel): self
+    public function withEntity(Channel $entity): self
     {
         $new = clone $this;
-        $new->name = $channel->getName();
+        $new->entity = $entity;
+        $new->name = $entity->getName();
+        $new->description = $entity->getDescription();
 
         return $new;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasEntity(): bool
+    {
+        return $this->entity !== null;
     }
 
     /**
@@ -35,12 +56,21 @@ class ChannelForm extends FormModel
     }
 
     /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
      * @return array
      */
     public function getAttributeLabels(): array
     {
         return [
             'name' => 'Name',
+            'description' => 'Description (optional)',
         ];
     }
 
@@ -56,4 +86,5 @@ class ChannelForm extends FormModel
             ],
         ];
     }
+
 }
