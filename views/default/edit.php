@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use Mailery\Web\Widget\FlashMessage;
+use Yiisoft\Yii\Widgets\ContentDecorator;
 
 /** @var Mailery\Channel\Smtp\Form\ChannelForm $form */
 /** @var Yiisoft\Form\Widget\Field $field */
@@ -8,6 +9,12 @@ use Mailery\Web\Widget\FlashMessage;
 /** @var Yiisoft\Yii\View\Csrf $csrf */
 
 ?>
+
+<?= ContentDecorator::widget()
+    ->viewFile('@vendor/maileryio/mailery-channel-smtp/views/default/_layout.php')
+    ->parameters(compact('channel', 'csrf'))
+    ->begin(); ?>
+
 <div class="mb-2"></div>
 <div class="row">
     <div class="col-12">
@@ -21,3 +28,5 @@ use Mailery\Web\Widget\FlashMessage;
         <?= $this->render('_form', compact('csrf', 'field', 'form')) ?>
     </div>
 </div>
+
+<?= ContentDecorator::end() ?>

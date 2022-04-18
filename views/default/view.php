@@ -2,6 +2,7 @@
 
 use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Mailery\Widget\Dataview\DetailView;
+use Yiisoft\Yii\Widgets\ContentDecorator;
 
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Mailery\Channel\Smtp\Entity\SmtpChannel $channel */
@@ -9,6 +10,11 @@ use Mailery\Widget\Dataview\DetailView;
 $this->setTitle($channel->getName());
 
 ?>
+
+<?= ContentDecorator::widget()
+    ->viewFile('@vendor/maileryio/mailery-channel-smtp/views/default/_layout.php')
+    ->parameters(compact('channel', 'csrf'))
+    ->begin(); ?>
 
 <div class="mb-2"></div>
 <div class="row">
@@ -46,3 +52,5 @@ $this->setTitle($channel->getName());
         ?>
     </div>
 </div>
+
+<?= ContentDecorator::end() ?>

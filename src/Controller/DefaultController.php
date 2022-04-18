@@ -50,9 +50,7 @@ class DefaultController
             return $this->responseFactory->createResponse(Status::NOT_FOUND);
         }
 
-        $content = $this->viewRenderer->renderPartialAsString('view', compact('channel'));
-
-        return $this->viewRenderer->render('_layout', compact('channel', 'content'));
+        return $this->viewRenderer->render('view', compact('channel'));
     }
 
     /**
@@ -108,9 +106,7 @@ class DefaultController
             );
         }
 
-        $content = $this->viewRenderer->renderPartialAsString('edit', compact('form'));
-
-        return $this->viewRenderer->render('_layout', compact('channel', 'content'));
+        return $this->viewRenderer->render('edit', compact('channel', 'form'));
     }
 
     /**
