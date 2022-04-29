@@ -3,12 +3,11 @@
 namespace Mailery\Channel\Smtp\Model;
 
 use Mailery\Channel\Model\ChannelTypeInterface;
-use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Mailery\Campaign\Recipient\Model\RecipientIterator;
 use Mailery\Channel\Handler\HandlerInterface;
 use Mailery\Channel\Entity\Channel;
 
-class ChannelType implements ChannelTypeInterface
+class SmtpChannelType implements ChannelTypeInterface
 {
     /**
      * @param HandlerInterface $handler
@@ -18,6 +17,14 @@ class ChannelType implements ChannelTypeInterface
         private HandlerInterface $handler,
         private RecipientIterator $recipientIterator
     ) {}
+
+    /**
+     * @inheritdoc
+     */
+    public function getName(): string
+    {
+        return self::class;
+    }
 
     /**
      * @inheritdoc
@@ -72,6 +79,6 @@ class ChannelType implements ChannelTypeInterface
      */
     public function isEntitySameType(Channel $entity): bool
     {
-        return $entity instanceof SmtpChannel;
+        return $entity->getType() === $this->getName();
     }
 }

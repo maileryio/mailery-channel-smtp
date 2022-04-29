@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use Mailery\Channel\Smtp\Entity\SmtpChannel;
-use Mailery\Widget\Dataview\DetailView;
+use Yiisoft\Yii\DataView\DetailView;
 use Yiisoft\Yii\Widgets\ContentDecorator;
 
 /** @var Yiisoft\Yii\WebView $this */
@@ -27,14 +27,11 @@ $this->setTitle($channel->getName());
 <div class="row">
     <div class="col-12">
         <?= DetailView::widget()
-            ->data($channel)
+            ->model($channel)
             ->options([
                 'class' => 'table table-top-borderless detail-view',
             ])
-            ->emptyText('(not set)')
-            ->emptyTextOptions([
-                'class' => 'text-muted',
-            ])
+            ->emptyValue('<span class="text-muted">(not set)</span>')
             ->attributes([
                 [
                     'label' => 'Name',

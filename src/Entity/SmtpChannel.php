@@ -8,11 +8,12 @@ use Mailery\Channel\Entity\Channel;
 use Mailery\Common\Entity\RoutableEntityInterface;
 use Mailery\Activity\Log\Entity\LoggableEntityInterface;
 use Mailery\Activity\Log\Entity\LoggableEntityTrait;
+use Mailery\Channel\Smtp\Model\SmtpChannelType;
 
 #[Entity(
     table: 'channels',
 )]
-#[SingleTable(value: SmtpChannel::class)]
+#[SingleTable(value: SmtpChannelType::class)]
 class SmtpChannel extends Channel implements RoutableEntityInterface, LoggableEntityInterface
 {
     use LoggableEntityTrait;
