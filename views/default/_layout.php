@@ -8,7 +8,7 @@ use Yiisoft\Yii\Bootstrap5\Nav;
 
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Psr\Http\Message\ServerRequestInterface $request */
-/** @var \Mailery\Channel\Smtp\Entity\SmtpChannel $channel */
+/** @var Mailery\Channel\Smtp\Entity\SmtpChannel $channel */
 /** @var Yiisoft\Yii\View\Csrf $csrf */
 /** @var bool $submitted */
 
