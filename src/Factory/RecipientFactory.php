@@ -3,8 +3,8 @@
 namespace Mailery\Channel\Smtp\Factory;
 
 use Mailery\Campaign\Entity\Recipient;
-use Mailery\Channel\Factory\RecipientFactoryInterface;
-use Mailery\Sender\Email\Model\SenderLabel;
+use Mailery\Campaign\Recipient\Factory\RecipientFactoryInterface;
+use Mailery\Campaign\Recipient\Model\IdentificatorInterface as Identificator;
 use Mailery\Subscriber\Entity\Subscriber;
 
 class RecipientFactory implements RecipientFactoryInterface
@@ -24,17 +24,11 @@ class RecipientFactory implements RecipientFactoryInterface
     /**
      * @inheritdoc
      */
-    public function fromIdentificator(string $identificator): array
+    public function fromIdentificator(Identificator $identificator): Recipient
     {
-        $recipients = [];
-        foreach (SenderLabel::fromString($identificator) as $senderLabel) {
-            /** @var SenderLabel $senderLabel */
-            $recipients[] = (new Recipient())
-                 ->setName($senderLabel->getName())
-                 ->setIdentifier($senderLabel->getEmail());
-        }
-
-        return $recipients;
+        return (new Recipient())
+            ->setName($identificator->getName())
+            ->setIdentifier($identificator->getIdentificator());
     }
 
 }

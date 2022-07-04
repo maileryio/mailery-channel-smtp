@@ -3,6 +3,7 @@
 namespace Mailery\Channel\Smtp\Model;
 
 use Mailery\Channel\Model\ChannelTypeInterface;
+use Mailery\Campaign\Recipient\Factory\IdentificatorFactoryInterface as IdentificatorFactory;
 use Mailery\Campaign\Recipient\Model\RecipientIterator;
 use Mailery\Channel\Handler\HandlerInterface;
 use Mailery\Channel\Entity\Channel;
@@ -12,10 +13,12 @@ class SmtpChannelType implements ChannelTypeInterface
     /**
      * @param HandlerInterface $handler
      * @param RecipientIterator $recipientIterator
+     * @param IdentificatorFactory $identificatorFactory
      */
     public function __construct(
         private HandlerInterface $handler,
-        private RecipientIterator $recipientIterator
+        private RecipientIterator $recipientIterator,
+        private IdentificatorFactory $identificatorFactory
     ) {}
 
     /**
@@ -77,8 +80,17 @@ class SmtpChannelType implements ChannelTypeInterface
     /**
      * @inheritdoc
      */
+    public function getIdentificatorFactory(): IdentificatorFactory
+    {
+        return $this->identificatorFactory;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function isEntitySameType(Channel $entity): bool
     {
         return $entity->getType() === $this->getName();
     }
+
 }

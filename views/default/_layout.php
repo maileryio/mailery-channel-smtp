@@ -32,6 +32,12 @@ $this->setTitle($channel->getName());
                                 ->method('delete')
                                 ->href($url->generate($channel->getDeleteRouteName(), $channel->getDeleteRouteParams()))
                                 ->confirm('Are you sure?')
+                                ->afterRequest(<<<JS
+                                    (res) => {
+                                        res.redirected && res.url && (window.location.href = res.url);
+                                    }
+                                    JS
+                                )
                                 ->options([
                                     'class' => 'btn btn-sm btn-danger mx-sm-1',
                                 ])
