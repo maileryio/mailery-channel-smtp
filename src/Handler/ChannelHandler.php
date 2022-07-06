@@ -4,10 +4,10 @@ namespace Mailery\Channel\Smtp\Handler;
 
 use Mailery\Campaign\Entity\Sendout;
 use Mailery\Campaign\Entity\Recipient;
+use Mailery\Channel\Smtp\Factory\MailerFactory;
 use Mailery\Channel\Handler\HandlerInterface;
 use Cycle\ORM\ORMInterface;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
-use Yiisoft\Mailer\MailerInterface;
 use Mailery\Sender\Email\Entity\EmailSender;
 use Mailery\Template\Email\Entity\EmailTemplate;
 
@@ -16,10 +16,11 @@ class ChannelHandler implements HandlerInterface
 
     /**
      * @param ORMInterface $orm
+     * @param MailerFactory $mailerFactory
      */
     public function __construct(
         private ORMInterface $orm,
-        private MailerInterface $mailer
+        private MailerFactory $mailerFactory
     ) {}
 
     /**
@@ -29,6 +30,8 @@ class ChannelHandler implements HandlerInterface
     {
         $recipient->setSendout($sendout);
         (new EntityWriter($this->orm))->write([$recipient]);
+
+        $mailer = $this->mailerFactory->create();
 
         /** @var EmailSender $sender */
         $sender = $sendout->getCampaign()->getSender();
