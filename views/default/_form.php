@@ -1,24 +1,24 @@
 <?php declare(strict_types=1);
 
-use Yiisoft\Form\Widget\Form;
+use Yiisoft\Html\Tag\Form;
+use Yiisoft\Form\Field;
 
 /** @var Mailery\Channel\Smtp\Form\ChannelForm $form */
-/** @var Yiisoft\Form\Widget\Field $field */
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Yiisoft\Yii\View\Csrf $csrf */
 
 ?>
-<?= Form::widget()
+<?= Form::tag()
         ->csrf($csrf)
         ->id('channel-smtp-form')
-        ->begin(); ?>
+        ->post()
+        ->open(); ?>
 
-<?= $field->text($form, 'name')->autofocus(); ?>
+<?= Field::text($form, 'name')->autofocus(); ?>
 
-<?= $field->textArea($form, 'description', ['rows()' => [5]]); ?>
+<?= Field::textarea($form, 'description', ['rows()' => [5]]); ?>
 
-<?= $field->submitButton()
-        ->class('btn btn-primary float-right mt-2')
-        ->value($form->hasEntity() ? 'Save changes' : 'Add channel'); ?>
+<?= Field::submitButton()
+        ->content($form->hasEntity() ? 'Save changes' : 'Add channel'); ?>
 
-<?= Form::end(); ?>
+<?= Form::tag()->close(); ?>

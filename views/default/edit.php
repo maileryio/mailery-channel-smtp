@@ -4,7 +4,6 @@ use Mailery\Web\Widget\FlashMessage;
 use Yiisoft\Yii\Widgets\ContentDecorator;
 
 /** @var Mailery\Channel\Smtp\Form\ChannelForm $form */
-/** @var Yiisoft\Form\Widget\Field $field */
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Yiisoft\Yii\View\Csrf $csrf */
 
@@ -25,7 +24,7 @@ use Yiisoft\Yii\Widgets\ContentDecorator;
 
 <div class="row">
     <div class="col-12">
-        <?= $this->render('_form', compact('csrf', 'field', 'form')) ?>
+        <?= $this->render('_form', compact('csrf', 'form')) ?>
     </div>
 </div>
 

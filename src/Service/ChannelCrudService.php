@@ -2,7 +2,7 @@
 
 namespace Mailery\Channel\Smtp\Service;
 
-use Cycle\ORM\ORMInterface;
+use Cycle\ORM\EntityManagerInterface;
 use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Mailery\Channel\Smtp\ValueObject\ChannelValueObject;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
@@ -10,10 +10,10 @@ use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 class ChannelCrudService
 {
     /**
-     * @param ORMInterface $orm
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
-        private ORMInterface $orm
+        private EntityManagerInterface $entityManager
     ) {}
 
     /**
@@ -27,7 +27,7 @@ class ChannelCrudService
             ->setDescription($valueObject->getDescription())
         ;
 
-        (new EntityWriter($this->orm))->write([$channel]);
+        (new EntityWriter($this->entityManager))->write([$channel]);
 
         return $channel;
     }
@@ -44,7 +44,7 @@ class ChannelCrudService
             ->setDescription($valueObject->getDescription())
         ;
 
-        (new EntityWriter($this->orm))->write([$channel]);
+        (new EntityWriter($this->entityManager))->write([$channel]);
 
         return $channel;
     }
@@ -55,7 +55,7 @@ class ChannelCrudService
      */
     public function delete(SmtpChannel $channel): bool
     {
-        (new EntityWriter($this->orm))->delete([$channel]);
+        (new EntityWriter($this->entityManager))->delete([$channel]);
 
         return true;
     }
