@@ -20,6 +20,7 @@
         "php": "^7.4",
         "foxy/foxy": "^1.0",
         "maileryio/mailery-channel": "dev-master",
+        "maileryio/mailery-messendger": "dev-master",
         "symfony/amazon-mailer": "^6.1"
     },
     "require-dev": {
