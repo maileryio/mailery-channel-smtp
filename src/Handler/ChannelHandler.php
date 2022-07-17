@@ -12,7 +12,7 @@ class ChannelHandler implements HandlerInterface
     /**
      * @inheritdoc
      */
-    public function withSuppressErrors(bool $suppressErrors): bool
+    public function withSuppressErrors(bool $suppressErrors): self
     {
         throw new \Exception('Not implemented');
     }

@@ -6,12 +6,16 @@ use Mailery\Campaign\Recipient\Model\RecipientIterator;
 use Mailery\Campaign\Recipient\Factory\RecipientFactory;
 use Mailery\Channel\Smtp\Factory\IdentificatorFactory;
 use Mailery\Channel\Smtp\Handler\ChannelHandler;
+use Mailery\Subscriber\Repository\SubscriberRepository;
 
 return [
     SmtpChannelType::class =>  static function (ContainerInterface $container) {
         return new SmtpChannelType(
             $container->get(ChannelHandler::class),
-            new RecipientIterator(new RecipientFactory()),
+            new RecipientIterator(
+                new RecipientFactory(),
+                $container->get(SubscriberRepository::class)
+            ),
             new IdentificatorFactory()
         );
     },
