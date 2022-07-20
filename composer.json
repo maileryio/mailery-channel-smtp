@@ -22,8 +22,10 @@
         "maileryio/mailery-channel": "dev-master",
         "maileryio/mailery-messenger": "dev-master",
         "symfony/amazon-mailer": "^6.1",
+        "symfony/beanstalkd-messenger": "^6.1",
         "symfony/mailer": "^5.3",
-        "symfony/messenger": "^6.1"
+        "symfony/messenger": "^6.1",
+        "symfony/mime": "^6.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
