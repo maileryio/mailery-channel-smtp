@@ -3,6 +3,7 @@
 use Mailery\Channel\Smtp\Entity\SmtpChannel;
 use Yiisoft\Yii\DataView\DetailView;
 use Yiisoft\Yii\Widgets\ContentDecorator;
+use Mailery\Web\Vue\Directive;
 
 /** @var Yiisoft\Yii\WebView $this */
 /** @var Mailery\Channel\Smtp\Entity\SmtpChannel $channel */
@@ -36,13 +37,13 @@ $this->setTitle($channel->getName());
                 [
                     'label' => 'Name',
                     'value' => function (SmtpChannel $data, $index) {
-                        return $data->getName();
+                        return Directive::pre($data->getName());
                     },
                 ],
                 [
                     'label' => 'Description',
                     'value' => function (SmtpChannel $data, $index) {
-                        return $data->getDescription();
+                        return Directive::pre($data->getDescription());
                     },
                 ],
             ]);
