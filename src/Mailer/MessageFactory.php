@@ -6,27 +6,40 @@ use Mailery\Campaign\Entity\Campaign;
 use Mailery\Campaign\Entity\Recipient;
 use Mailery\Sender\Email\Entity\EmailSender;
 use Mailery\Template\Email\Entity\EmailTemplate;
-use Mailery\Template\Email\Renderer\WrappedMessage;
-use Mailery\Template\Email\Renderer\WrappedUrlGenerator;
 use Mailery\Template\Renderer\Context;
+use Mailery\Template\Renderer\ContextInterface;
 use Mailery\Template\Renderer\BodyRendererInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Yiisoft\Router\UrlGeneratorInterface;
 
 class MessageFactory
 {
 
     /**
+     * @var ContextInterface|null
+     */
+    private ?ContextInterface $context;
+
+    /**
      * @param Email $message
      * @param BodyRendererInterface $renderer
-     * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(
         private Email $message,
-        private BodyRendererInterface $renderer,
-        private UrlGeneratorInterface $urlGenerator
+        private BodyRendererInterface $renderer
     ) {}
+
+    /**
+     * @param ContextInterface $context
+     * @return self
+     */
+    public function withContext(ContextInterface $context): self
+    {
+        $new = clone $this;
+        $new->context = $context;
+
+        return $new;
+    }
 
     /**
      * @param Campaign $campaign
@@ -49,11 +62,12 @@ class MessageFactory
             ->text($template->getTextContent())
             ->html($template->getHtmlContent());
 
+        if (($context = $this->context) === null) {
+            $context = new Context();
+        }
+
         $this->renderer
-            ->withContext(new Context([
-                'url' => new WrappedUrlGenerator($this->urlGenerator, $campaign, $recipient),
-                'message' => new WrappedMessage($message),
-            ]))
+            ->withContext($context)
             ->render($message);
 
         return $message;

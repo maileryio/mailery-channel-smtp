@@ -53,22 +53,6 @@ class SmtpChannel extends Channel implements RoutableEntityInterface, LoggableEn
     /**
      * @inheritdoc
      */
-    public function getPreviewRouteName(): ?string
-    {
-        return '/channel/smtp/view';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPreviewRouteParams(): array
-    {
-        return ['id' => $this->getId()];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getEditRouteName(): ?string
     {
         return '/channel/smtp/edit';
