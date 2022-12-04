@@ -80,9 +80,9 @@ class MessageFactory
             $variables[$variable] = $context->get($variable);
         }
 
-//        $recipient->setVariables(
-//            $this->convertVariablesToArray($variables)
-//        );
+        $recipient->setMessageContext(
+            $this->convertVariablesToArray($variables)
+        );
 
         return $message;
     }

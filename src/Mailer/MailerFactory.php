@@ -7,6 +7,7 @@ use Mailery\Channel\Smtp\Mailer\DsnFactoryInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mailer\Transport\TransportFactoryInterface;
 
 class MailerFactory
@@ -30,11 +31,20 @@ class MailerFactory
     public function create(Channel $channel): MailerInterface
     {
         return new Mailer(
-            $this->transportFactory->create(
-                $this->dsnFactory->create($channel)
-            ),
+            $this->createTransport($channel),
             null,
             $this->eventDispatcher
+        );
+    }
+
+    /**
+     * @param Channel $channel
+     * @return TransportInterface
+     */
+    public function createTransport(Channel $channel): TransportInterface
+    {
+        return $this->transportFactory->create(
+            $this->dsnFactory->create($channel)
         );
     }
 
