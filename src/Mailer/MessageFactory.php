@@ -9,8 +9,10 @@ use Mailery\Template\Email\Entity\EmailTemplate;
 use Mailery\Template\Renderer\Context;
 use Mailery\Template\Renderer\ContextInterface;
 use Mailery\Template\Renderer\BodyRendererInterface;
+use Mailery\Template\Twig\NodeVisitor\TemplateVariablesVisitor;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
+use Yiisoft\Strings\StringHelper;
 
 class MessageFactory
 {
@@ -66,11 +68,47 @@ class MessageFactory
             $context = new Context();
         }
 
+        $visitor = new TemplateVariablesVisitor();
+
         $this->renderer
             ->withContext($context)
+            ->withNodeVisitor($visitor)
             ->render($message);
 
+        $variables = [];
+        foreach ($visitor->getVariables() as $variable) {
+            $variables[$variable] = $context->get($variable);
+        }
+
+//        $recipient->setVariables(
+//            $this->convertVariablesToArray($variables)
+//        );
+
         return $message;
+    }
+
+    /**
+     * @param array $variables
+     * @return array
+     */
+    private function convertVariablesToArray(array $variables): array
+    {
+        $array = [];
+
+        foreach ($variables as $key => $value) {
+            $keys =  StringHelper::parsePath($key);
+            $c = &$array[array_shift($keys)];
+            foreach ($keys as $key) {
+                if (isset($c[$key]) && $c[$key] === true) {
+                    $c[$key] = [];
+                }
+                $c = &$c[$key];
+            }
+            if ($c === null) {
+                $c = $value;
+            }
+        }
+        return $array;
     }
 
 }
