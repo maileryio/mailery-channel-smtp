@@ -44,12 +44,14 @@ class MessageFactory
     }
 
     /**
-     * @param Campaign $campaign
      * @param Recipient $recipient
      * @return Email
      */
-    public function create(Campaign $campaign, Recipient $recipient): Email
+    public function create(Recipient $recipient): Email
     {
+        /** @var Campaign $campaign */
+        $campaign = $recipient->getSendout()->getCampaign();
+
         /** @var EmailSender $sender */
         $sender = $campaign->getSender();
 
