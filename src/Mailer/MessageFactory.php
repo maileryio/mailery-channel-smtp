@@ -11,7 +11,6 @@ use Mailery\Template\Renderer\ContextInterface;
 use Mailery\Template\Renderer\BodyRendererInterface;
 use Mailery\Template\Twig\NodeVisitor\TemplateVariablesVisitor;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Yiisoft\Strings\StringHelper;
 
 class MessageFactory
@@ -23,13 +22,15 @@ class MessageFactory
     private ?ContextInterface $context;
 
     /**
-     * @param Email $message
+     * @param EmailMessage $message
      * @param BodyRendererInterface $renderer
      */
     public function __construct(
-        private Email $message,
+        private EmailMessage $message,
         private BodyRendererInterface $renderer
-    ) {}
+    ) {
+        $this->context = new Context();
+    }
 
     /**
      * @param ContextInterface $context
@@ -45,9 +46,9 @@ class MessageFactory
 
     /**
      * @param Recipient $recipient
-     * @return Email
+     * @return EmailMessage
      */
-    public function create(Recipient $recipient): Email
+    public function create(Recipient $recipient): EmailMessage
     {
         /** @var Campaign $campaign */
         $campaign = $recipient->getSendout()->getCampaign();
@@ -66,38 +67,32 @@ class MessageFactory
             ->text($template->getTextContent())
             ->html($template->getHtmlContent());
 
-        if (($context = $this->context) === null) {
-            $context = new Context();
-        }
-
         $visitor = new TemplateVariablesVisitor();
 
         $this->renderer
-            ->withContext($context)
+            ->withContext($this->context)
             ->withNodeVisitor($visitor)
             ->render($message);
 
-        $variables = [];
+        $context = [];
         foreach ($visitor->getVariables() as $variable) {
-            $variables[$variable] = $context->get($variable);
+            $context[$variable] = $this->context->get($variable);
         }
 
-        $recipient->setMessageContext(
-            $this->convertVariablesToArray($variables)
-        );
+        $message->context($this->convertDotToArray($context));
 
         return $message;
     }
 
     /**
-     * @param array $variables
+     * @param array $list
      * @return array
      */
-    private function convertVariablesToArray(array $variables): array
+    private function convertDotToArray(array $list): array
     {
         $array = [];
 
-        foreach ($variables as $key => $value) {
+        foreach ($list as $key => $value) {
             $keys =  StringHelper::parsePath($key);
             $c = &$array[array_shift($keys)];
             foreach ($keys as $key) {
