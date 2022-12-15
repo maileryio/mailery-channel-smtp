@@ -9,7 +9,7 @@ use Mailery\Template\Email\Entity\EmailTemplate;
 use Mailery\Template\Renderer\Context;
 use Mailery\Template\Renderer\ContextInterface;
 use Mailery\Template\Renderer\BodyRendererInterface;
-use Mailery\Template\Twig\NodeVisitor\TemplateVariablesVisitor;
+use Mailery\Template\Twig\NodeVisitor\VariablesVisitor;
 use Symfony\Component\Mime\Address;
 use Yiisoft\Strings\StringHelper;
 
@@ -45,14 +45,12 @@ class MessageFactory
     }
 
     /**
+     * @param Campaign $campaign
      * @param Recipient $recipient
      * @return EmailMessage
      */
-    public function create(Recipient $recipient): EmailMessage
+    public function create(Campaign $campaign, Recipient $recipient): EmailMessage
     {
-        /** @var Campaign $campaign */
-        $campaign = $recipient->getSendout()->getCampaign();
-
         /** @var EmailSender $sender */
         $sender = $campaign->getSender();
 
@@ -67,15 +65,15 @@ class MessageFactory
             ->text($template->getTextContent())
             ->html($template->getHtmlContent());
 
-        $visitor = new TemplateVariablesVisitor();
+        $variablesVisitor = new VariablesVisitor();
 
         $this->renderer
+            ->addNodeVisitor($variablesVisitor)
             ->withContext($this->context)
-            ->withNodeVisitor($visitor)
             ->render($message);
 
         $context = [];
-        foreach ($visitor->getVariables() as $variable) {
+        foreach ($variablesVisitor->getVariables() as $variable) {
             $context[$variable] = $this->context->get($variable);
         }
 
