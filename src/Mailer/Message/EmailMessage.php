@@ -1,6 +1,6 @@
 <?php
 
-namespace Mailery\Channel\Smtp\Mailer;
+namespace Mailery\Channel\Smtp\Mailer\Message;
 
 use Symfony\Component\Mime\Email;
 

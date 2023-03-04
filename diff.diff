@@ -1,0 +1,299 @@
+diff --git a/config/common.php b/config/common.php
+index cf5dbf7..9fa9856 100644
+--- a/config/common.php
++++ b/config/common.php
+@@ -8,8 +8,8 @@ use Mailery\Channel\Smtp\Handler\ChannelHandler;
+ use Mailery\Subscriber\Repository\SubscriberRepository;
+ use Mailery\Channel\Smtp\Mailer\MailerFactory;
+ use Mailery\Channel\Smtp\Mailer\MessageFactory;
+-use Mailery\Channel\Smtp\Mailer\EmailMessage;
+ use Mailery\Channel\Smtp\Mailer\SmtpDsnFactory;
++use Mailery\Channel\Smtp\Mailer\Message\EmailMessage;
+ use Yiisoft\Definitions\DynamicReference;
+ use Yiisoft\Definitions\Reference;
+ use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
+diff --git a/src/Handler/ChannelHandler.php b/src/Handler/ChannelHandler.php
+index a3a79e1..21c0490 100644
+--- a/src/Handler/ChannelHandler.php
++++ b/src/Handler/ChannelHandler.php
+@@ -7,10 +7,13 @@ use Mailery\Campaign\Entity\Campaign;
+ use Mailery\Campaign\Entity\Sendout;
+ use Mailery\Campaign\Entity\Recipient;
+ use Mailery\Campaign\Renderer\WrappedUrlGenerator;
++use Mailery\Campaign\Mailer\Message\Middleware\ShortUrlLinker;
++use Mailery\Campaign\Mailer\Message\Middleware\TrackingPixel;
+ use Mailery\Channel\Handler\HandlerInterface;
+ use Mailery\Sender\Email\Entity\EmailSender;
+ use Mailery\Channel\Smtp\Mailer\MailerFactory;
+ use Mailery\Channel\Smtp\Mailer\MessageFactory;
++use Mailery\Channel\Smtp\Mailer\Message\WrappedTemplate;
+ use Mailery\Template\Renderer\Context;
+ use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
+ 
+@@ -49,7 +52,7 @@ class ChannelHandler implements HandlerInterface
+     /**
+      * @inheritdoc
+      */
+-    public function handle(Sendout $sendout, Recipient $recipient): bool
++    public function handle(Sendout $sendout, \Iterator|array $recipients): bool
+     {
+         /** @var Campaign $campaign */
+         $campaign = $sendout->getCampaign();
+@@ -57,27 +60,46 @@ class ChannelHandler implements HandlerInterface
+         /** @var EmailSender $sender */
+         $sender = $campaign->getSender();
+ 
+-        $recipient->setSendout($sendout);
+-        (new EntityWriter($this->entityManager))->write([$recipient]);
++        $template = (new WrappedTemplate($campaign->getTemplate()))
++            ->withSubject($campaign->getName());
+ 
+-        $message = $this->messageFactory
+-            ->withContext($this->createContext($recipient))
+-            ->create($campaign, $recipient);
++        $messageFactory = $this->messageFactory
++            ->withMiddlewares([
++                new ShortUrlLinker($campaign),
++                new TrackingPixel($campaign)
++            ]);
+ 
+-        $recipient->setMessageContext($message->getContext());
++        foreach ($recipients as $recipient) {
++            /** @var Recipient $recipient */
++            if (!$recipient->canBeSend()) {
++                continue;
++            }
+ 
+-        try {
+-            $sentMessage = $this->mailerFactory
+-                ->createTransport($sender->getChannel())
+-                ->send($message);
+-
+-            $recipient->setSent(true);
+-            $recipient->setMessageId($sentMessage->getMessageId());
+-        } catch (\Exception $e) {
+-            $recipient->setError($e->getMessage());
+-            throw $e;
+-        } finally {
++            $recipient->setSendout($sendout);
+             (new EntityWriter($this->entityManager))->write([$recipient]);
++
++            $message = $messageFactory
++                ->withContext($this->createContext($recipient))
++                ->create($template, $sender, $recipient);
++var_dump(111);exit;
++            $recipient->setMessageContext($message->getContext());
++
++            try {
++                $sentMessage = $this->mailerFactory
++                    ->createTransport($sender->getChannel())
++                    ->send($message);
++
++                $recipient->setSent(true);
++                $recipient->setMessageId($sentMessage->getMessageId());
++            } catch (\Exception $e) {
++                $recipient->setError($e->getMessage());
++
++                if (!$this->suppressErrors) {
++                    throw $e;
++                }
++            } finally {
++                (new EntityWriter($this->entityManager))->write([$recipient]);
++            }
+         }
+ 
+         return true;
+diff --git a/src/Mailer/EmailMessage.php b/src/Mailer/Message/EmailMessage.php
+similarity index 90%
+rename from src/Mailer/EmailMessage.php
+rename to src/Mailer/Message/EmailMessage.php
+index a7ff8ef..cade921 100644
+--- a/src/Mailer/EmailMessage.php
++++ b/src/Mailer/Message/EmailMessage.php
+@@ -1,6 +1,6 @@
+ <?php
+ 
+-namespace Mailery\Channel\Smtp\Mailer;
++namespace Mailery\Channel\Smtp\Mailer\Message;
+ 
+ use Symfony\Component\Mime\Email;
+ 
+diff --git a/src/Mailer/Message/WrappedTemplate.php b/src/Mailer/Message/WrappedTemplate.php
+new file mode 100644
+index 0000000..b0f4d51
+--- /dev/null
++++ b/src/Mailer/Message/WrappedTemplate.php
+@@ -0,0 +1,91 @@
++<?php
++
++namespace Mailery\Channel\Smtp\Mailer\Message;
++
++use Mailery\Template\Email\Entity\EmailTemplate;
++
++class WrappedTemplate
++{
++    /**
++     * @var string
++     */
++    private string $subject;
++
++    /**
++     * @var string
++     */
++    private string $textContent;
++
++    /**
++     * @var string
++     */
++    private string $htmlContent;
++
++    /**
++     * @param EmailTemplate $template
++     */
++    public function __construct(
++        private EmailTemplate $template
++    ) {}
++
++    /**
++     * @param string $subject
++     * @return self
++     */
++    public function withSubject(string $subject): self
++    {
++        $new = clone $this;
++        $new->subject = $subject;
++
++        return $new;
++    }
++
++    /**
++     * @param string $textContent
++     * @return self
++     */
++    public function withTextContent(string $textContent): self
++    {
++        $new = clone $this;
++        $new->textContent = $textContent;
++
++        return $new;
++    }
++
++    /**
++     * @param string $htmlContent
++     * @return self
++     */
++    public function withHtmlContent(string $htmlContent): self
++    {
++        $new = clone $this;
++        $new->htmlContent = $htmlContent;
++
++        return $new;
++    }
++
++    /**
++     * @return string
++     */
++    public function getSubject(): string
++    {
++        return $this->subject ?? $this->template->getName();
++    }
++
++    /**
++     * @return string
++     */
++    public function getTextContent(): string
++    {
++        return $this->textContent ?? $this->template->getTextContent();
++    }
++
++    /**
++     * @return string
++     */
++    public function getHtmlContent(): string
++    {
++        return $this->htmlContent ?? $this->template->getHtmlContent();
++    }
++
++}
+diff --git a/src/Mailer/MessageFactory.php b/src/Mailer/MessageFactory.php
+index c22efed..3b6b8af 100644
+--- a/src/Mailer/MessageFactory.php
++++ b/src/Mailer/MessageFactory.php
+@@ -2,16 +2,16 @@
+ 
+ namespace Mailery\Channel\Smtp\Mailer;
+ 
+-use Mailery\Campaign\Entity\Campaign;
+ use Mailery\Campaign\Entity\Recipient;
+ use Mailery\Sender\Email\Entity\EmailSender;
+-use Mailery\Template\Email\Entity\EmailTemplate;
+ use Mailery\Template\Renderer\Context;
+ use Mailery\Template\Renderer\ContextInterface;
+ use Mailery\Template\Renderer\BodyRendererInterface;
+ use Mailery\Template\Twig\NodeVisitor\VariablesVisitor;
+ use Symfony\Component\Mime\Address;
+ use Yiisoft\Strings\StringHelper;
++use Mailery\Channel\Smtp\Mailer\Message\EmailMessage;
++use Mailery\Channel\Smtp\Mailer\Message\WrappedTemplate;
+ 
+ class MessageFactory
+ {
+@@ -21,6 +21,11 @@ class MessageFactory
+      */
+     private ?ContextInterface $context;
+ 
++    /**
++     * @var array
++     */
++    private array $middlewares = [];
++
+     /**
+      * @param EmailMessage $message
+      * @param BodyRendererInterface $renderer
+@@ -45,26 +50,37 @@ class MessageFactory
+     }
+ 
+     /**
+-     * @param Campaign $campaign
+-     * @param Recipient $recipient
+-     * @return EmailMessage
++     * @param array $middlewares
++     * @return self
+      */
+-    public function create(Campaign $campaign, Recipient $recipient): EmailMessage
++    public function withMiddlewares(array $middlewares): self
+     {
+-        /** @var EmailSender $sender */
+-        $sender = $campaign->getSender();
++        $new = clone $this;
++        $new->middlewares = $middlewares;
+ 
+-        /** @var EmailTemplate $template */
+-        $template = $campaign->getTemplate();
++        return $new;
++    }
+ 
++    /**
++     * @param WrappedTemplate $template
++     * @param EmailSender $sender
++     * @param Recipient $recipient
++     * @return EmailMessage
++     */
++    public function create(WrappedTemplate $template, EmailSender $sender, Recipient $recipient): EmailMessage
++    {
+         $message = (clone $this->message)
+             ->from(new Address($sender->getEmail(), $sender->getName()))
+             ->to(new Address($recipient->getIdentifier(), $recipient->getName()))
+             ->replyTo(new Address($sender->getReplyEmail(), $sender->getReplyName()))
+-            ->subject($campaign->getName())
++            ->subject($template->getSubject())
+             ->text($template->getTextContent())
+             ->html($template->getHtmlContent());
+ 
++        foreach ($this->middlewares as $middleware) {
++            $message = $middleware($message);
++        }
++
+         $variablesVisitor = new VariablesVisitor();
+ 
+         $this->renderer

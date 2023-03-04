@@ -2,16 +2,16 @@
 
 namespace Mailery\Channel\Smtp\Mailer;
 
-use Mailery\Campaign\Entity\Campaign;
 use Mailery\Campaign\Entity\Recipient;
 use Mailery\Sender\Email\Entity\EmailSender;
-use Mailery\Template\Email\Entity\EmailTemplate;
 use Mailery\Template\Renderer\Context;
 use Mailery\Template\Renderer\ContextInterface;
 use Mailery\Template\Renderer\BodyRendererInterface;
 use Mailery\Template\Twig\NodeVisitor\VariablesVisitor;
 use Symfony\Component\Mime\Address;
 use Yiisoft\Strings\StringHelper;
+use Mailery\Channel\Smtp\Mailer\Message\EmailMessage;
+use Mailery\Channel\Smtp\Mailer\Message\WrappedTemplate;
 
 class MessageFactory
 {
@@ -20,6 +20,11 @@ class MessageFactory
      * @var ContextInterface|null
      */
     private ?ContextInterface $context;
+
+    /**
+     * @var array
+     */
+    private array $middlewares = [];
 
     /**
      * @param EmailMessage $message
@@ -45,25 +50,36 @@ class MessageFactory
     }
 
     /**
-     * @param Campaign $campaign
+     * @param array $middlewares
+     * @return self
+     */
+    public function withMiddlewares(array $middlewares): self
+    {
+        $new = clone $this;
+        $new->middlewares = $middlewares;
+
+        return $new;
+    }
+
+    /**
+     * @param WrappedTemplate $template
+     * @param EmailSender $sender
      * @param Recipient $recipient
      * @return EmailMessage
      */
-    public function create(Campaign $campaign, Recipient $recipient): EmailMessage
+    public function create(WrappedTemplate $template, EmailSender $sender, Recipient $recipient): EmailMessage
     {
-        /** @var EmailSender $sender */
-        $sender = $campaign->getSender();
-
-        /** @var EmailTemplate $template */
-        $template = $campaign->getTemplate();
-
         $message = (clone $this->message)
             ->from(new Address($sender->getEmail(), $sender->getName()))
             ->to(new Address($recipient->getIdentifier(), $recipient->getName()))
             ->replyTo(new Address($sender->getReplyEmail(), $sender->getReplyName()))
-            ->subject($campaign->getName())
+            ->subject($template->getSubject())
             ->text($template->getTextContent())
             ->html($template->getHtmlContent());
+
+        foreach ($this->middlewares as $middleware) {
+            $message = $middleware($message);
+        }
 
         $variablesVisitor = new VariablesVisitor();
 
